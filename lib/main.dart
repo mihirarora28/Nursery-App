@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:shops/screens/productDetailsScreen.dart';
+import 'package:shops/widgets/product_item.dart';
 import 'models/product.dart';
 void main() {
   runApp(MyApp());
@@ -9,8 +10,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      routes: {
+        '/ProductDetailsScreen': (ctx) => ProductDetailsScreen(),
+      },
       home:  MyHomePage(),
       debugShowCheckedModeBanner: false,
+      initialRoute: '/',
       theme: ThemeData(
         primarySwatch: Colors.deepOrange,
       ),
@@ -59,6 +64,18 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor:Theme.of(context).primaryColor,
         title: Text('MyFinalShopApp'),
+      ),
+      body: GridView.builder(
+        padding: EdgeInsets.all(20.0),
+        itemBuilder: (ctx,index) => ProductItem(id: List[index].id,description:
+          List[index].description,title: List[index].title,ImageURL: List[index].imageUrl,),
+        itemCount: List.length,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 3/2,
+          crossAxisSpacing: 10.0,
+          mainAxisSpacing: 10.0,
+        ),
       ),
 
     );
