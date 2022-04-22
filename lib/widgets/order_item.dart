@@ -28,7 +28,7 @@ class _OrderItemHaState extends State<OrderItemHa> {
         children:[ ListTile(
           title: Text(widget.totalAmount),
           subtitle: Text(widget.dateTime),
-          trailing: IconButton(icon: Icon(expanded == true ?Icons.arrow_downward_outlined :Icons.arrow_upward_rounded  ), onPressed: (){
+          trailing: IconButton(icon: Icon(expanded == true ?Icons.arrow_upward_rounded :Icons.arrow_downward_rounded  ), onPressed: (){
             setState(() {
               expanded = !expanded;
             });

@@ -22,7 +22,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create : (ctx)=> Products()),
@@ -59,10 +58,10 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       drawer: Drawer(
         child: Column(
-            children: [
+            children:[
               AppBar(
                 backgroundColor: Theme.of(context).primaryColor,
-                title: Text('Hello'),automaticallyImplyLeading: false,),
+                title: Text('Shopping App'),automaticallyImplyLeading: false,),
               Divider(),
               ListTile(
                 onTap: (){

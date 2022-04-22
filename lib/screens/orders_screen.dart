@@ -19,10 +19,10 @@ class orders_screen extends StatelessWidget {
           itemCount: myList.items.length,
             itemBuilder: (ctx,index){
             return OrderItemHa(
-                dateTime:DateFormat.yMMMMEEEEd().format(DateTime.now()).toString() ,
+                dateTime:DateFormat.yMEd().add_jms().format(myList.items[index].dateTime).toString(),
                 id: myList.items[index].id.toString(),
                 products:  myList.items[index].products,
-                totalAmount: myList.items[index].totalAmount.toString());
+                totalAmount: myList.items[index].totalAmount.toStringAsFixed(2));
           // return Text(myList.items[index].totalAmount.toString());
         }),
       ),

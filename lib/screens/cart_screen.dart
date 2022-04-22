@@ -4,7 +4,6 @@ import 'package:shops/providers/cart_provider.dart';
 import 'package:shops/providers/orders_providers.dart';
 import 'package:shops/widgets/cardWidget.dart';
 class CartScreen extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     final myList = Provider.of<CartProvider>(context,listen: true);
@@ -22,7 +21,6 @@ class CartScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-
                   Text('Total',style: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),),
                   SizedBox(width: 20.0,),
                   Chip(
@@ -31,11 +29,13 @@ class CartScreen extends StatelessWidget {
                   ),
                    FlatButton(
                     child: Text('ORDER NOW',style: TextStyle(color: Theme.of(context).primaryColor),),onPressed: (){
+                      if(myList.sizeOfMap == 0){
+                        return;
+                      }
                      myList2.addItem(DateTime.now().toString(), myList.totalamount, myList.items.values.toList());
                      myList.cartREmoveAll();
                    },)
                 ],
-
               ),
             ),
           ),
