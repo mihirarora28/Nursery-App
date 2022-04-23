@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shops/models/product.dart';
 class Products with ChangeNotifier{
-   List<Product> items =[
+   List<Product> _items =[
     Product(
       id: 'p1',
       title: 'Red Shirt',
@@ -46,7 +46,11 @@ class Products with ChangeNotifier{
      notifyListeners();
    }
    List<Product> get products{
-    return [...items];
+    return [..._items];
+   }
+   void delete(String id){
+     _items.removeWhere((element) => element.id == id);
+     notifyListeners();
    }
 
 }

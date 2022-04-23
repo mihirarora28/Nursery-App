@@ -70,5 +70,28 @@ class CartProvider with ChangeNotifier{
     calculate();
     notifyListeners();
   }
+  void undoCart(String id){
+    if(!_cartitems.containsKey(id)){
+      return;
+    }
+    if(_cartitems[id]!.quantity == 0){
+      return;
+    }
+    if(_cartitems[id]!.quantity == 1){
+      _cartitems.remove(id);
+
+      sizeOfMap = _cartitems.length;
+
+      calculate();
+      notifyListeners();
+      return;
+    }
+
+    _cartitems.update(id, (value) => Cart(title: value.title,id: value.id,price: value.price,quantity: value.quantity - 1));
+    sizeOfMap = _cartitems.length;
+
+    calculate();
+    notifyListeners();
+  }
 
 }

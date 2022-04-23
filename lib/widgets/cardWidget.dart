@@ -25,6 +25,34 @@ class cartWidget extends StatelessWidget {
           myList.removeItem(id);
          }
       },
+      confirmDismiss: (direction){
+        if(direction == DismissDirection.endToStart){
+         return showDialog(context: context, builder: (ctx){
+            return AlertDialog(
+              title: Text('Are you Sure ?',style: TextStyle(color: Theme.of(context).primaryColor,fontWeight: FontWeight.normal),),
+              content: Text('All products will be deleted!'),
+              actions: [
+                FlatButton(onPressed: (){Navigator.of(ctx).pop(false);}, child: Text('NO',style: TextStyle(color: Theme.of(context).primaryColor,fontWeight: FontWeight.bold),)),
+                FlatButton(onPressed: (){Navigator.of(ctx).pop(true);}, child: Text('YES',style: TextStyle(color: Theme.of(context).primaryColor,fontWeight: FontWeight.bold),))
+              ],
+            );
+          });
+        }
+        else{
+       return   showDialog(context: context, builder: (ctx){
+            return AlertDialog(
+              title: Text('Are you Sure ?',style: TextStyle(color: Theme.of(context).primaryColor,fontWeight: FontWeight.normal),),
+              content: Text('1 product will be deleted!'),
+              actions: [
+                FlatButton(onPressed: (){Navigator.of(ctx).pop(false);}, child: Text('NO',style: TextStyle(color: Theme.of(context).primaryColor,fontWeight: FontWeight.bold),)),
+                FlatButton(onPressed: (){Navigator.of(ctx).pop(true);}, child: Text('YES',style: TextStyle(color: Theme.of(context).primaryColor,fontWeight: FontWeight.bold),))
+
+              ],
+            );
+          });
+        }
+        // Future.value(true);
+      },
       background: Container(
         alignment: Alignment.centerRight,
         child: Icon(Icons.delete,color: Colors.white,),

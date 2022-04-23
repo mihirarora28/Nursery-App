@@ -18,7 +18,7 @@ class OrderItemHa extends StatefulWidget {
 }
 
 class _OrderItemHaState extends State<OrderItemHa> {
-  var expanded = true;
+  var expanded = false;
 
   @override
   Widget build(BuildContext context) {

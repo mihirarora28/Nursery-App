@@ -21,7 +21,7 @@ class ProductItem extends StatelessWidget {
     final myList = Provider.of<Products>(context,listen: false);
     final myList2 = Provider.of<CartProvider>(context,listen: false);
     Provider.of<Product>(context,listen: true);
-    Product prod = myList.items.firstWhere((element) => element.id == id);
+    Product prod = myList.products.firstWhere((element) => element.id == id);
     return ClipRRect(
       borderRadius: BorderRadius.circular(20.0),
       child: GridTile(
@@ -38,6 +38,13 @@ class ProductItem extends StatelessWidget {
           trailing: IconButton(
             iconSize: 25.0,
             icon: Icon(Icons.shopping_cart),onPressed: (){
+            Scaffold.of(context).hideCurrentSnackBar();
+              Scaffold.of(context).showSnackBar(
+                  SnackBar(
+                    duration: Duration(seconds: 2),
+                    content: Text('Added to the cart!'), backgroundColor: Theme.of(context).primaryColor,action: SnackBarAction(label: 'UNDO',onPressed: (){
+                      myList2.undoCart(id);
+                  },textColor: Colors.white,),));
 
             myList2.addItem(id, title, price);
             myList2.calculate();

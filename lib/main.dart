@@ -4,6 +4,7 @@ import 'package:shops/providers/cart_provider.dart';
 import 'package:shops/providers/cart_provider.dart';
 import 'package:shops/providers/orders_providers.dart';
 import 'package:shops/providers/providers_list.dart';
+import 'package:shops/screens/addProduct.dart';
 import 'package:shops/screens/cart_screen.dart';
 import 'package:shops/screens/orders_screen.dart';
 import 'package:shops/screens/productDetailsScreen.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
           '/ProductDetailsScreen': (ctx) => ProductDetailsScreen(),
           '/cartScreen': (ctx) => CartScreen(),
           '/OrdersScreen': (ctx) => orders_screen(),
+          '/addProductScreen': (ctx) => AddProduct(),
         },
         home:  MyHomePage(),
         debugShowCheckedModeBanner: false,
@@ -80,6 +82,7 @@ class MyHomePage extends StatelessWidget {
                 title: Text('Your Cart'),
               ),
               Divider(),
+
               ListTile(
                 onTap: (){
                   Navigator.of(context).pushNamed('/OrdersScreen');
@@ -88,6 +91,16 @@ class MyHomePage extends StatelessWidget {
                 leading: Icon(Icons.payments_rounded),
                 title: Text('Your Orders Screen'),
               ),
+              Divider(),
+              ListTile(
+
+                onTap: (){
+                  Navigator.of(context).pushNamed('/addProductScreen');
+                },
+                leading: Icon(Icons.add),
+                title: Text('Add/Edit/Delete Product'),
+              ),
+
 
             ],
           ),
