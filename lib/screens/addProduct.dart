@@ -14,11 +14,17 @@ class AddProduct extends StatelessWidget {
         backgroundColor: Theme.of(context).primaryColor,
         title: Text('Shopping App'),
         actions: [
-          Padding(padding: EdgeInsets.all(10.0), child: Icon(Icons.add)),
+          Padding(padding: EdgeInsets.all(10.0), child: IconButton(icon: Icon(Icons.add), onPressed: (){Navigator.of(context).pushNamed('/EditProductsScreen');},)),
         ],
       ),
       body: ListView.builder(itemCount: list.products.length, itemBuilder: (ctx,index){
-        return newProductWidget(imageUrl: list.products[index].imageUrl,title: list.products[index].title,id: list.products[index].id,);
+        return newProductWidget(
+          imageUrl: list.products[index].imageUrl,
+          title: list.products[index].title,
+          id: list.products[index].id,
+         description: list.products[index].description,
+         price: list.products[index].price,
+        );
       }),
     );
   }

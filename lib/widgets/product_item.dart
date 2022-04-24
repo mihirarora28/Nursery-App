@@ -26,7 +26,13 @@ class ProductItem extends StatelessWidget {
       borderRadius: BorderRadius.circular(20.0),
       child: GridTile(
         child: GestureDetector(
-          onTap: (){Navigator.pushNamed(context, '/ProductDetailsScreen',arguments: id);},
+          onTap: (){ Navigator.pushNamed(context, '/ProductDetailsScreen',arguments: {
+            'images' : ImageURL,
+            'title':title,
+            'price':price,
+            'description':description,
+
+          });},
             child: Image.network(ImageURL,fit: BoxFit.cover,)),
         footer: GridTileBar(
           leading: IconButton(

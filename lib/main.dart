@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shops/providers/cart_provider.dart';
-import 'package:shops/providers/cart_provider.dart';
 import 'package:shops/providers/orders_providers.dart';
 import 'package:shops/providers/providers_list.dart';
 import 'package:shops/screens/addProduct.dart';
 import 'package:shops/screens/cart_screen.dart';
+import 'package:shops/screens/editProduct.dart';
 import 'package:shops/screens/orders_screen.dart';
 import 'package:shops/screens/productDetailsScreen.dart';
 import 'package:shops/widgets/badge.dart';
@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
           '/cartScreen': (ctx) => CartScreen(),
           '/OrdersScreen': (ctx) => orders_screen(),
           '/addProductScreen': (ctx) => AddProduct(),
+          '/EditProductsScreen': (ctx) => EditProductsScreen(),
         },
         home:  MyHomePage(),
         debugShowCheckedModeBanner: false,
@@ -48,7 +49,15 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
+
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+
   @override
   Widget build(BuildContext context) {
     final myList = Provider.of<Products>(context,listen: true);
@@ -125,8 +134,8 @@ class MyHomePage extends StatelessWidget {
               itemBuilder: (_){
                return  [
                  PopupMenuItem(
-                 child: Text("Only Favourites"),value: FilterOptions.onlyFavourites,),
-                PopupMenuItem(child: Text("Show All"),value: FilterOptions.ShowmeAll,),];
+                 child: Text("Favourite Products"),value: FilterOptions.onlyFavourites,),
+                PopupMenuItem(child: Text("Show All Products"),value: FilterOptions.ShowmeAll,),];
               }),
         ],
         backgroundColor:Theme.of(context).primaryColor,

@@ -50,7 +50,44 @@ class Products with ChangeNotifier{
    }
    void delete(String id){
      _items.removeWhere((element) => element.id == id);
+     _items.sort();
      notifyListeners();
+   }
+   void addProduct(String id,String title,String description,double price,String Url) {
+     bool present = false;
+     _items.forEach((element) {
+       if (element.id == id) {
+         present = true;
+       }
+     });
+     if (present == false) {
+       _items.add(Product(id: id,
+           title: title,
+           description: description,
+           price: price,
+           imageUrl: Url));
+        // _items.sort();
+       notifyListeners();
+     }
+     else {
+       _items.forEach((element) {
+         if(element.id == id){
+           element.id = id;
+           element.title = title;
+           element.description=description;
+           element.price=price;
+           element.imageUrl=Url;
+         }
+       });
+       // _items.removeWhere((element) => element.id == id);
+       // _items.add(Product(id: DateTime.now().toString(),
+       //     title: title,
+       //     description: description,
+       //     price: price,
+       //     imageUrl: Url));
+        // _items.sort();
+       notifyListeners();
+     }
    }
 
 }
