@@ -14,7 +14,7 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
   final priceController = TextEditingController();
   final descriptionController = TextEditingController();
   final _form = GlobalKey<FormState>();
-  bool onlyOnce = false;
+  bool onlyOnce = true;
 @override
   void initState() {
     // TODO: implement initState

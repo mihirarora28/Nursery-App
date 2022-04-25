@@ -50,7 +50,6 @@ class Products with ChangeNotifier{
    }
    void delete(String id){
      _items.removeWhere((element) => element.id == id);
-     _items.sort();
      notifyListeners();
    }
    void addProduct(String id,String title,String description,double price,String Url) {
@@ -79,13 +78,6 @@ class Products with ChangeNotifier{
            element.imageUrl=Url;
          }
        });
-       // _items.removeWhere((element) => element.id == id);
-       // _items.add(Product(id: DateTime.now().toString(),
-       //     title: title,
-       //     description: description,
-       //     price: price,
-       //     imageUrl: Url));
-        // _items.sort();
        notifyListeners();
      }
    }

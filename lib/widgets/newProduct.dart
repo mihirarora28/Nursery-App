@@ -17,12 +17,7 @@ required this.description,
   });
   @override
   Widget build(BuildContext context) {
-    // print(id);
-    // print(imageUrl);
-    // print(price);
-    // print(description);
-    // print(title);
-    final list = Provider.of<Products>(context,listen:  false);
+    final list = Provider.of<Products>(context,listen:  true);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListTile(
