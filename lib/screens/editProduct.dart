@@ -14,7 +14,7 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
   final priceController = TextEditingController();
   final descriptionController = TextEditingController();
   final _form = GlobalKey<FormState>();
-
+  bool onlyOnce = false;
 @override
   void initState() {
     // TODO: implement initState
@@ -26,29 +26,37 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
   }
   @override
   Widget build(BuildContext context) {
-     // final args = ModalRoute.of(context)?.settings.arguments as Map<String,dynamic>;
     Map arguments = (ModalRoute.of(context)?.settings.arguments??{}) as Map;
     final productList = Provider.of<Products>(context,listen: false);
-    (arguments['title']==null) ?nameController.text='':nameController.text = arguments['title'];
-    (arguments['description']==null) ?descriptionController.text='':descriptionController.text = arguments['description'];
-    (arguments['imageUrl']==null) ?imageController.text='':imageController.text = arguments['imageUrl'];
-    (arguments['price']==null) ?priceController.text='':priceController.text = arguments['price'].toString();
     final check = arguments['edited'];
+    if(onlyOnce == true) {
+      (arguments['title'] == null) ? nameController.text = '' : nameController
+          .text = arguments['title'];
+      (arguments['description'] == null)
+          ? descriptionController.text = ''
+          : descriptionController.text = arguments['description'];
+      (arguments['imageUrl'] == null)
+          ? imageController.text = ''
+          : imageController.text = arguments['imageUrl'];
+      (arguments['price'] == null) ? priceController.text = '' : priceController
+          .text = arguments['price'].toString();
+      onlyOnce = false;
+    }
     return Scaffold(
       appBar: AppBar(
         actions: [
           IconButton(onPressed: (){
 
-         final ans =   _form.currentState!.validate();
+         final ans =  _form.currentState!.validate();
          if(!ans){
            return;
          }
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Product Added!'), backgroundColor: Theme.of(context).primaryColor,duration: Duration(seconds: 2),
             ));
          if(check == null)
-            productList.addProduct(DateTime.now().toString(), nameController.text, descriptionController.toString(), double.parse(priceController.text), imageController.text);
+            productList.addProduct(DateTime.now().toString(), nameController.text, descriptionController.text.toString(), double.parse(priceController.text), imageController.text);
          else
-           productList.addProduct(arguments['id'], nameController.text, descriptionController.toString(), double.parse(priceController.text), imageController.text);
+           productList.addProduct(arguments['id'], nameController.text, descriptionController.text.toString(), double.parse(priceController.text), imageController.text);
          Navigator.of(context).pop();
 
           }, icon: Icon(Icons.save))
@@ -177,9 +185,9 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Product Added!'), backgroundColor: Theme.of(context).primaryColor,duration: Duration(seconds: 2),
                   ));
                   if(check == null)
-                    productList.addProduct(DateTime.now().toString(), nameController.text, descriptionController.toString(), double.parse(priceController.text), imageController.text);
+                    productList.addProduct(DateTime.now().toString(), nameController.text, descriptionController.text.toString(), double.parse(priceController.text), imageController.text);
                   else
-                    productList.addProduct(arguments['id'], nameController.text, descriptionController.toString(), double.parse(priceController.text), imageController.text);
+                    productList.addProduct(arguments['id'], nameController.text,descriptionController.text.toString(), double.parse(priceController.text), imageController.text);
                   Navigator.of(context).pop();
                 },),
               )
