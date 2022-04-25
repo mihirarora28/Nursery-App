@@ -9,7 +9,6 @@ import 'package:shops/screens/editProduct.dart';
 import 'package:shops/screens/orders_screen.dart';
 import 'package:shops/screens/productDetailsScreen.dart';
 import 'package:shops/widgets/badge.dart';
-import 'package:shops/widgets/badge.dart';
 import 'package:shops/widgets/product_item.dart';
 import 'models/product.dart';
 void main() {

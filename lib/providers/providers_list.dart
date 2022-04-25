@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shops/models/product.dart';
+import 'package:http/http.dart' as https;
+import 'dart:convert';
 class Products with ChangeNotifier{
    List<Product> _items =[
     Product(
@@ -52,34 +54,38 @@ class Products with ChangeNotifier{
      _items.removeWhere((element) => element.id == id);
      notifyListeners();
    }
-   void addProduct(String id,String title,String description,double price,String Url) {
-     bool present = false;
+   void UpdateProduct(String id,String title,String description,double price,String Url){
      _items.forEach((element) {
        if (element.id == id) {
-         present = true;
+         element.id = id;
+         element.title = title;
+         element.description = description;
+         element.price = price;
+         element.imageUrl = Url;
        }
      });
-     if (present == false) {
-       _items.add(Product(id: id,
+         notifyListeners();
+   }
+   Future<void> addProduct(String id,String title,String description,double price,String Url) {
+
+     var url = 'https://shopapp2-1c326-default-rtdb.firebaseio.com/products.json';
+     var URL = Uri.parse(url);
+   return  https.post(URL,body: json.encode({
+       // 'id' : id,
+       'title': title,
+      'description' : description,
+     'price' : price,
+     'imageUrl':Url,
+     })).then((response){
+       // print();
+       _items.add(
+           Product(id: json.decode(response.body)['name'], // getting the id;
            title: title,
            description: description,
            price: price,
            imageUrl: Url));
-        // _items.sort();
-       notifyListeners();
+           notifyListeners();
+           // print( json.decode(response.body)['name']);
+     });
      }
-     else {
-       _items.forEach((element) {
-         if(element.id == id){
-           element.id = id;
-           element.title = title;
-           element.description=description;
-           element.price=price;
-           element.imageUrl=Url;
-         }
-       });
-       notifyListeners();
-     }
-   }
-
 }

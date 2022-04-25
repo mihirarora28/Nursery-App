@@ -15,6 +15,7 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
   final descriptionController = TextEditingController();
   final _form = GlobalKey<FormState>();
   bool onlyOnce = true;
+  bool isLoading = false;
 @override
   void initState() {
     // TODO: implement initState
@@ -46,6 +47,9 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
       appBar: AppBar(
         actions: [
           IconButton(onPressed: (){
+            setState(() {
+              isLoading = true;
+            });
 
          final ans =  _form.currentState!.validate();
          if(!ans){
@@ -53,18 +57,30 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
          }
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Product Added!'), backgroundColor: Theme.of(context).primaryColor,duration: Duration(seconds: 2),
             ));
-         if(check == null)
-            productList.addProduct(DateTime.now().toString(), nameController.text, descriptionController.text.toString(), double.parse(priceController.text), imageController.text);
-         else
-           productList.addProduct(arguments['id'], nameController.text, descriptionController.text.toString(), double.parse(priceController.text), imageController.text);
-         Navigator.of(context).pop();
+         if(check == null){
+           productList.addProduct(
+               DateTime.now().toString(), nameController.text,
+               descriptionController.text.toString(),
+               double.parse(priceController.text),
+               imageController.text).then((value) {
+             setState(() {
+               Navigator.of(context).pop();
+             });
+           });
+         }
+         else {
+           productList.UpdateProduct(arguments['id'], nameController.text,
+               descriptionController.text.toString(),
+               double.parse(priceController.text), imageController.text);
+           Navigator.of(context).pop();
+           }
 
           }, icon: Icon(Icons.save))
         ],
         backgroundColor: Theme.of(context).primaryColor,
         title: Text('Edit Products'),
       ),
-      body: Padding(
+      body: isLoading == false ? Padding(
         padding: EdgeInsets.all(20.0),
         child: Form(
           key: _form,
@@ -178,23 +194,41 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                 child: FlatButton(
                   color: Theme.of(context).primaryColor,
                   child: Text('SUBMIT FORM',style: TextStyle(color: Colors.white),),onPressed: (){
+                    setState(() {
+                      isLoading = true;
+                    });
                   final ans =   _form.currentState!.validate();
                   if(!ans){
                     return;
                   }
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Product Added!'), backgroundColor: Theme.of(context).primaryColor,duration: Duration(seconds: 2),
                   ));
-                  if(check == null)
-                    productList.addProduct(DateTime.now().toString(), nameController.text, descriptionController.text.toString(), double.parse(priceController.text), imageController.text);
-                  else
-                    productList.addProduct(arguments['id'], nameController.text,descriptionController.text.toString(), double.parse(priceController.text), imageController.text);
-                  Navigator.of(context).pop();
+                  if(check == null) {
+                    productList.addProduct(
+                        DateTime.now().toString(), nameController.text,
+                        descriptionController.text.toString(),
+                        double.parse(priceController.text),
+                        imageController.text).then((value) {
+                      setState(() {
+                        Navigator.of(context).pop();
+                      });
+                    });
+                  }
+                  else {
+                    productList.UpdateProduct(
+                        arguments['id'], nameController.text,
+                        descriptionController.text.toString(),
+                        double.parse(priceController.text),
+                        imageController.text);
+                    Navigator.of(context).pop();
+                  }
+
                 },),
               )
             ],
           ),
         ),
-      ),
+      ):Center(child: CircularProgressIndicator()),
 
     );
   }
