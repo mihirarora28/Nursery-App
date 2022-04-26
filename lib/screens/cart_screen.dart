@@ -37,12 +37,13 @@ class _CartScreenState extends State<CartScreen> {
                  IsLoading == false? FlatButton(
 
                     child: Text('ORDER NOW',style: TextStyle(color: Theme.of(context).primaryColor),),onPressed: (){
+                   if(myList.sizeOfMap == 0){
+                     return;
+                   }
                       setState(() {
                         IsLoading = true;
                       });
-                      if(myList.sizeOfMap == 0){
-                        return;
-                      }
+
                      myList2.addItem(DateTime.now().toString(), myList.totalamount, myList.items.values.toList()).then((value){
                        myList.cartREmoveAll();
                        setState(() {
