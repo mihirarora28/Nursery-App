@@ -56,6 +56,20 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool isLoading = false;
+  @override
+  void initState() {
+    setState(() {
+      isLoading = true;
+    });
+    // TODO: implement initState
+    Provider.of<Products>(context,listen: false).fetchData().then((value) {
+      setState(() {
+        isLoading = false;
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +154,7 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor:Theme.of(context).primaryColor,
         title: Text('Shopping App'),
       ),
-      body: GridView.builder(
+      body:isLoading == true?Center(child: CircularProgressIndicator()):GridView.builder(
         padding: EdgeInsets.all(20.0),
         itemBuilder: (ctx,index) => ChangeNotifierProvider.value(
           value:newList[index],
@@ -149,6 +163,7 @@ class _MyHomePageState extends State<MyHomePage> {
           newList[index].description,title: newList[index].title,
             ImageURL: newList[index].imageUrl,
             price: newList[index].price,
+            favourites: newList[index].isFavorites,
           ),
         ),
         itemCount: newList.length,

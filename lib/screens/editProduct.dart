@@ -57,16 +57,28 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
          }
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Product Added!'), backgroundColor: Theme.of(context).primaryColor,duration: Duration(seconds: 2),
             ));
-         if(check == null){
+         if(check == null) {
            productList.addProduct(
                DateTime.now().toString(), nameController.text,
                descriptionController.text.toString(),
                double.parse(priceController.text),
-               imageController.text).then((value) {
-             setState(() {
-               Navigator.of(context).pop();
-             });
+               imageController.text)
+           .catchError((error){
+            return showDialog(context: context, builder: (ctx){
+               return AlertDialog(
+                 title: Text('Oops! Error Occured'),
+                 content: Text('Something went Wrong!'),
+                 actions: [
+                   FlatButton(onPressed: (){
+                     Navigator.of(ctx).pop();
+               }, child: Text('OKAY',style: TextStyle(color: Theme.of(context).primaryColor),))
+                 ],
+               );
+             }).then((value) => Navigator.of(context).pop());
+           }).then((value) {
+             Navigator.of(context).pop();
            });
+
          }
          else {
            productList.UpdateProduct(arguments['id'], nameController.text,
@@ -208,10 +220,21 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                         DateTime.now().toString(), nameController.text,
                         descriptionController.text.toString(),
                         double.parse(priceController.text),
-                        imageController.text).then((value) {
-                      setState(() {
-                        Navigator.of(context).pop();
-                      });
+                        imageController.text)
+                        .catchError((error){
+                      return showDialog(context: context, builder: (ctx){
+                        return AlertDialog(
+                          title: Text('Oops! Error Occured'),
+                          content: Text('Something went Wrong!'),
+                          actions: [
+                            FlatButton(onPressed: (){
+                              Navigator.of(ctx).pop();
+                            }, child: Text('OKAY',style: TextStyle(color: Theme.of(context).primaryColor),))
+                          ],
+                        );
+                      }).then((value) => Navigator.of(context).pop());
+                    }).then((value) {
+                      Navigator.of(context).pop();
                     });
                   }
                   else {

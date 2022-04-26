@@ -3,7 +3,14 @@ import 'package:provider/provider.dart';
 import 'package:shops/providers/cart_provider.dart';
 import 'package:shops/providers/orders_providers.dart';
 import 'package:shops/widgets/cardWidget.dart';
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
+  @override
+  State<CartScreen> createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  var IsLoading = false;
+
   @override
   Widget build(BuildContext context) {
     final myList = Provider.of<CartProvider>(context,listen: true);
@@ -27,14 +34,23 @@ class CartScreen extends StatelessWidget {
                     backgroundColor: Theme.of(context).primaryColor,
                     label: Text(myList.totalamount.toStringAsFixed(2),style: TextStyle(fontSize: 15.0,color: Colors.white),),
                   ),
-                   FlatButton(
+                 IsLoading == false? FlatButton(
+
                     child: Text('ORDER NOW',style: TextStyle(color: Theme.of(context).primaryColor),),onPressed: (){
+                      setState(() {
+                        IsLoading = true;
+                      });
                       if(myList.sizeOfMap == 0){
                         return;
                       }
-                     myList2.addItem(DateTime.now().toString(), myList.totalamount, myList.items.values.toList());
-                     myList.cartREmoveAll();
-                   },)
+                     myList2.addItem(DateTime.now().toString(), myList.totalamount, myList.items.values.toList()).then((value){
+                       myList.cartREmoveAll();
+                       setState(() {
+                         IsLoading = false;
+                       });
+                     });
+
+                   },): CircularProgressIndicator()
                 ],
               ),
             ),
@@ -56,7 +72,7 @@ class CartScreen extends StatelessWidget {
            ),
         ]
       ),
-      
+
     );
   }
 }
