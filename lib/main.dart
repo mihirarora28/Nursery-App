@@ -4,6 +4,7 @@ import 'package:shops/providers/cart_provider.dart';
 import 'package:shops/providers/orders_providers.dart';
 import 'package:shops/providers/providers_list.dart';
 import 'package:shops/screens/addProduct.dart';
+import 'package:shops/screens/auth_screen.dart';
 import 'package:shops/screens/cart_screen.dart';
 import 'package:shops/screens/editProduct.dart';
 import 'package:shops/screens/orders_screen.dart';
@@ -37,10 +38,11 @@ class MyApp extends StatelessWidget {
           '/OrdersScreen': (ctx) => orders_screen(),
           '/addProductScreen': (ctx) => AddProduct(),
           '/EditProductsScreen': (ctx) => EditProductsScreen(),
+            AuthScreen.routeName: (ctx) => AuthScreen(),
         },
         home:  MyHomePage(),
         debugShowCheckedModeBanner: false,
-        initialRoute: '/',
+        initialRoute:   AuthScreen.routeName,
         theme: ThemeData(
           primarySwatch: Colors.deepOrange,
         ),
