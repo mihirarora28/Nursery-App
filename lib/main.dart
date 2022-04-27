@@ -20,6 +20,7 @@ enum FilterOptions{
 }
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -70,9 +71,15 @@ class _MyHomePageState extends State<MyHomePage> {
     });
     super.initState();
   }
+  Future<void> onrefresh(BuildContext context) async{
+    // print("HEELLO");
+    await Provider.of<Products>(context,listen: false).fetchData();
+  }
 
   @override
   Widget build(BuildContext context) {
+
+
     final myList = Provider.of<Products>(context,listen: true);
     final myList2 = Provider.of<CartProvider>(context,listen: true);
     List<Product> newList = myList.products;
@@ -154,24 +161,28 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor:Theme.of(context).primaryColor,
         title: Text('Shopping App'),
       ),
-      body:isLoading == true?Center(child: CircularProgressIndicator()):GridView.builder(
-        padding: EdgeInsets.all(20.0),
-        itemBuilder: (ctx,index) => ChangeNotifierProvider.value(
-          value:newList[index],
-          child: ProductItem(
-            id:newList[index].id,description:
-          newList[index].description,title: newList[index].title,
-            ImageURL: newList[index].imageUrl,
-            price: newList[index].price,
-            favourites: newList[index].isFavorites,
+      body:isLoading == true ? Center(child: CircularProgressIndicator()):RefreshIndicator(
+       onRefresh: () => onrefresh(context),
+
+        child: GridView.builder(
+          padding: EdgeInsets.all(20.0),
+          itemBuilder: (ctx,index) => ChangeNotifierProvider.value(
+            value:newList[index],
+            child: ProductItem(
+              id:newList[index].id,description:
+            newList[index].description,title: newList[index].title,
+              ImageURL: newList[index].imageUrl,
+              price: newList[index].price,
+              favourites: newList[index].isFavorites,
+            ),
           ),
-        ),
-        itemCount: newList.length,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 3 /2,
-          crossAxisSpacing: 10.0,
-          mainAxisSpacing: 10.0,
+          itemCount: newList.length,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 3 /2,
+            crossAxisSpacing: 10.0,
+            mainAxisSpacing: 10.0,
+          ),
         ),
       ),
 

@@ -63,6 +63,7 @@ class OrdersProvider with ChangeNotifier{
     var url = 'https://shopapp2-1c326-default-rtdb.firebaseio.com/orders.json';
     final response = await https.get(Uri.parse(url));
     final data = jsonDecode(response.body) as Map<String,dynamic>;
+    print(data);
    final List<OrderItem> newOrder =[];
     data.forEach((key, value) {
       newOrder.add(OrderItem(dateTime: DateTime.parse(value['dateTime']) , id: key, products: (value['products'] as List<dynamic>).map((ee) => Cart(
