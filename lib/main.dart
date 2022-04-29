@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (ctx) => Products()),
         ChangeNotifierProvider(create: (ctx) => CartProvider()),
         ChangeNotifierProvider(create: (ctx) => OrdersProvider()),
-        // ChangeNotifierProvider(create : (ctx)=> AuthProvider()),
+        ChangeNotifierProvider(create: (ctx) => AuthProvider()),
       ],
       // value: Products()
       child: MaterialApp(
@@ -40,11 +40,11 @@ class MyApp extends StatelessWidget {
           '/OrdersScreen': (ctx) => orders_screen(),
           '/addProductScreen': (ctx) => AddProduct(),
           '/EditProductsScreen': (ctx) => EditProductsScreen(),
-          // AuthScreen.routeName: (ctx) => AuthScreen(),
+          AuthScreen.routeName: (ctx) => AuthScreen(),
         },
         home: MyHomePage(),
         debugShowCheckedModeBanner: false,
-        initialRoute: '/',
+        initialRoute: AuthScreen.routeName,
         theme: ThemeData(
           primarySwatch: Colors.deepOrange,
         ),

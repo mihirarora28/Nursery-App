@@ -6,33 +6,41 @@ import 'package:shops/providers/providers_list.dart';
 import 'package:shops/widgets/newProduct.dart';
 
 class AddProduct extends StatelessWidget {
-
-  Future<void> onrefresh(BuildContext context) async{
-    await Provider.of<Products>(context,listen: false).fetchData();
+  Future<void> onrefresh(BuildContext context) async {
+    await Provider.of<Products>(context, listen: false).fetchData();
   }
 
   @override
   Widget build(BuildContext context) {
-    final list = Provider.of<Products>(context,listen: true);
+    final list = Provider.of<Products>(context, listen: true);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         title: Text('Shopping App'),
         actions: [
-          Padding(padding: EdgeInsets.all(10.0), child: IconButton(icon: Icon(Icons.add), onPressed: (){Navigator.of(context).pushNamed('/EditProductsScreen');},)),
+          Padding(
+              padding: EdgeInsets.all(10.0),
+              child: IconButton(
+                icon: Icon(Icons.add),
+                onPressed: () {
+                  Navigator.of(context).pushNamed('/EditProductsScreen');
+                },
+              )),
         ],
       ),
       body: RefreshIndicator(
         onRefresh: () => onrefresh(context),
-        child: ListView.builder(itemCount: list.products.length, itemBuilder: (ctx,index){
-          return newProductWidget(
-            imageUrl: list.products[index].imageUrl,
-            title: list.products[index].title,
-            id: list.products[index].id,
-           description: list.products[index].description,
-           price: list.products[index].price,
-          );
-        }),
+        child: ListView.builder(
+            itemCount: list.products.length,
+            itemBuilder: (ctx, index) {
+              return newProductWidget(
+                imageUrl: list.products[index].imageUrl,
+                title: list.products[index].title,
+                id: list.products[index].id,
+                description: list.products[index].description,
+                price: list.products[index].price,
+              );
+            }),
       ),
     );
   }
