@@ -14,7 +14,7 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
   final priceController = TextEditingController();
   final descriptionController = TextEditingController();
   final _form = GlobalKey<FormState>();
-  bool onlyOnce = true;
+   bool onlyOnce = true;
   bool isLoading = false;
 @override
   void initState() {
@@ -29,8 +29,8 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
   Widget build(BuildContext context) {
     Map arguments = (ModalRoute.of(context)?.settings.arguments??{}) as Map;
     final productList = Provider.of<Products>(context,listen: false);
-    final check = arguments['edited'];
-    if(onlyOnce == true) {
+    var check = arguments['edited'];
+    if(onlyOnce == true ) {
       (arguments['title'] == null) ? nameController.text = '' : nameController
           .text = arguments['title'];
       (arguments['description'] == null)
@@ -52,7 +52,11 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
             });
 
          final ans =  _form.currentState!.validate();
+         print(ans);
          if(!ans){
+           setState(() {
+             isLoading = false;
+           });
            return;
          }
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Product Added!'), backgroundColor: Theme.of(context).primaryColor,duration: Duration(seconds: 2),
@@ -211,6 +215,9 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                     });
                   final ans =   _form.currentState!.validate();
                   if(!ans){
+                    setState(() {
+                      isLoading = false;
+                    });
                     return;
                   }
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Product Added!'), backgroundColor: Theme.of(context).primaryColor,duration: Duration(seconds: 2),
