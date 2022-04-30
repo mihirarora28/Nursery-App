@@ -24,8 +24,10 @@ class AuthProvider with ChangeNotifier {
         body: json.encode(
             {'email': email, 'password': password, 'returnSecureToken': test}));
     final val = json.decode(response.body);
+    print(val['error']);
     if (val['error'] != null) {
       // print("#2");
+
       throw HttpException(val['error']['message']);
     }
   }

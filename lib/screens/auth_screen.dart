@@ -129,21 +129,21 @@ class _AuthCardState extends State<AuthCard> {
           .catchError((error) {
         if (error.toString().contains("EMAIL_NOT_FOUND")) {
           showSomething('Email not found!');
-        }
-        if (error.toString().contains("INVALID_PASSWORD:")) {
+        } else if (error.toString().contains("INVALID_PASSWORD")) {
           showSomething('Invalid Password!');
+        } else if (error.toString().contains("TOO_MANY_ATTEMPTS_TRY_LATER")) {
+          showSomething('Too many attempts. Try again Later !');
         }
       });
     } else {
-      print(_authData);
+      // print(_authData);
       Provider.of<AuthProvider>(context, listen: false)
           .signUp(_authData['email'].toString(),
               _authData['password'].toString(), true)
           .catchError((error) {
         if (error.toString().contains("EMAIL_EXISTS")) {
-          showSomething('This Email already exists');
-        }
-        if (error.toString().contains("TOO_MANY_ATTEMPTS_TRY_LATER")) {
+          showSomething('This Email already exists !');
+        } else if (error.toString().contains("TOO_MANY_ATTEMPTS_TRY_LATER")) {
           showSomething('Too many attempts. Try again Later !');
         }
       });
