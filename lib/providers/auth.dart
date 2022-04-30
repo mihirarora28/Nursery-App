@@ -5,15 +5,30 @@ import 'dart:convert';
 
 import 'package:shops/models/httpexception.dart';
 
-class Auth with ChangeNotifier {
-  String token;
-  DateTime expiryDate;
-  String userId;
-
-  Auth({required this.expiryDate, required this.token, required this.userId});
-}
-
 class AuthProvider with ChangeNotifier {
+  var _token;
+  var _expiryDate;
+  var _userId;
+
+  String get token {
+    return _token;
+  }
+
+  bool get isAuthenticated {
+    print(_token);
+    print(_expiryDate);
+
+    print(_userId);
+
+    if (_token != null &&
+        _userId != null &&
+        _expiryDate != null &&
+        _expiryDate.isAfter(DateTime.now())) {
+      return true;
+    }
+    return false;
+  }
+
   final urlLogin =
       'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyABNfp75ZkF-dr_PrSC_Astzoi6Lt7L0ok';
   final urlRegister =
@@ -24,12 +39,17 @@ class AuthProvider with ChangeNotifier {
         body: json.encode(
             {'email': email, 'password': password, 'returnSecureToken': test}));
     final val = json.decode(response.body);
-    print(val['error']);
+    // print(val['error']);
     if (val['error'] != null) {
       // print("#2");
-
       throw HttpException(val['error']['message']);
     }
+    print(val);
+    _token = val['idToken'];
+    _expiryDate =
+        DateTime.now().add(Duration(seconds: int.parse(val['expiresIn'])));
+    _userId = val['localId'];
+    notifyListeners();
   }
 
   Future<void> signUp(String email, String password, bool test) async {
@@ -37,9 +57,15 @@ class AuthProvider with ChangeNotifier {
         body: json.encode(
             {'email': email, 'password': password, 'returnSecureToken': test}));
     final val = json.decode(response.body);
-    // print(val);
+
     if (val['error'] != null) {
       throw HttpException(val['error']['message']);
     }
+    _token = val['idToken'];
+    _expiryDate =
+        DateTime.now().add(Duration(seconds: int.parse(val['expiresIn'])));
+
+    _userId = val['localId'];
+    notifyListeners();
   }
 }

@@ -25,31 +25,37 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // final response = Provider.of<AuthProvider>(context, listen: false);
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (ctx) => Products()),
-        ChangeNotifierProvider(create: (ctx) => CartProvider()),
-        ChangeNotifierProvider(create: (ctx) => OrdersProvider()),
-        ChangeNotifierProvider(create: (ctx) => AuthProvider()),
-      ],
-      // value: Products()
-      child: MaterialApp(
-        routes: {
-          '/ProductDetailsScreen': (ctx) => ProductDetailsScreen(),
-          '/cartScreen': (ctx) => CartScreen(),
-          '/OrdersScreen': (ctx) => orders_screen(),
-          '/addProductScreen': (ctx) => AddProduct(),
-          '/EditProductsScreen': (ctx) => EditProductsScreen(),
-          AuthScreen.routeName: (ctx) => AuthScreen(),
-        },
-        home: MyHomePage(),
-        debugShowCheckedModeBanner: false,
-        initialRoute: AuthScreen.routeName,
-        theme: ThemeData(
-          primarySwatch: Colors.deepOrange,
-        ),
-      ),
-    );
+        providers: [
+          ChangeNotifierProvider(create: (ctx) => CartProvider()),
+          ChangeNotifierProvider(create: (ctx) => OrdersProvider()),
+          ChangeNotifierProvider(create: (ctx) => AuthProvider()),
+          ChangeNotifierProvider(create: (ctx) => Products()),
+          // ChangeNotifierProxyProvider<AuthProvider, Products>(
+          //     // create: Products(),
+          //     builder: (ctx, Auth, previousProd) => Products(Auth.token,
+          //         previousProd == null ? [] : previousProd.products)),
+        ],
+        // value: Products()
+        child: Consumer<AuthProvider>(
+          builder: (ctx2, Auth, _) => MaterialApp(
+            routes: {
+              '/ProductDetailsScreen': (ctx) => ProductDetailsScreen(),
+              '/cartScreen': (ctx) => CartScreen(),
+              '/OrdersScreen': (ctx) => orders_screen(),
+              '/addProductScreen': (ctx) => AddProduct(),
+              '/EditProductsScreen': (ctx) => EditProductsScreen(),
+              AuthScreen.routeName: (ctx) => AuthScreen(),
+            },
+            home: Auth.isAuthenticated == true ? MyHomePage() : AuthScreen(),
+            debugShowCheckedModeBanner: false,
+            initialRoute: '/',
+            theme: ThemeData(
+              primarySwatch: Colors.deepOrange,
+            ),
+          ),
+        ));
   }
 }
 
