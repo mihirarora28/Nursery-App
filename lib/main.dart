@@ -29,9 +29,19 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (ctx) => CartProvider()),
-          ChangeNotifierProvider(create: (ctx) => OrdersProvider()),
           ChangeNotifierProvider(create: (ctx) => AuthProvider()),
-          ChangeNotifierProvider(create: (ctx) => Products()),
+          ChangeNotifierProxyProvider<AuthProvider, OrdersProvider>(
+            create: (_) => OrdersProvider(null,
+                []), //error here saying 3 positional arguments expected,but 0 found.
+            update: (ctx, auth, previusProducts) => OrdersProvider(auth.token,
+                previusProducts == null ? [] : previusProducts.items),
+          ),
+          ChangeNotifierProxyProvider<AuthProvider, Products>(
+            create: (_) => Products(null,
+                []), //error here saying 3 positional arguments expected,but 0 found.
+            update: (ctx, auth, previusProducts) => Products(auth.token,
+                previusProducts == null ? [] : previusProducts.products),
+          ),
           // ChangeNotifierProxyProvider<AuthProvider, Products>(
           //     // create: Products(),
           //     builder: (ctx, Auth, previousProd) => Products(Auth.token,

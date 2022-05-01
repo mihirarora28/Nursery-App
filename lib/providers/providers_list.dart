@@ -58,13 +58,13 @@ class Products with ChangeNotifier {
     notifyListeners();
   }
 
-  // final mytoken;
-  // Products(this.mytoken, this._items);
+  final mytoken;
+  Products(this.mytoken, this._items);
 
   Future<void> fetchData() async {
     List<Product> _its = [];
-    const url =
-        'https://shopapp2-1c326-default-rtdb.firebaseio.com/products.json';
+    final url =
+        'https://shopapp2-1c326-default-rtdb.firebaseio.com/products.json?auth=$mytoken';
     try {
       final response = await https.get(Uri.parse(url));
 
@@ -89,7 +89,7 @@ class Products with ChangeNotifier {
 
   Future<void> updateFavourites(String id, bool ans) async {
     var url =
-        'https://shopapp2-1c326-default-rtdb.firebaseio.com/products/$id.json';
+        'https://shopapp2-1c326-default-rtdb.firebaseio.com/products/$id.json?auth=$mytoken';
     try {
       final response = await https
           .patch(Uri.parse(url), body: json.encode({'favourites': ans}))
@@ -111,7 +111,7 @@ class Products with ChangeNotifier {
   Future<void> addProduct(String id, String title, String description,
       double price, String Url) async {
     var url =
-        'https://shopapp2-1c326-default-rtdb.firebaseio.com/products.json';
+        'https://shopapp2-1c326-default-rtdb.firebaseio.com/products.json?auth=$mytoken';
     var URL = Uri.parse(url);
     try {
       final response = await https.post(URL,
