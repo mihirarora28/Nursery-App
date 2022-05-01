@@ -19,8 +19,8 @@ class OrdersProvider with ChangeNotifier {
   List<OrderItem> _items = [];
 
   final AuthToken;
-
-  OrdersProvider(this.AuthToken, this._items);
+  final _UserId;
+  OrdersProvider(this.AuthToken, this._items,this._UserId);
 
   List<OrderItem> get items {
     return [..._items];
@@ -40,10 +40,11 @@ class OrdersProvider with ChangeNotifier {
     // });
     String timeStamp = DateTime.now().toIso8601String();
     try {
-      final response = await https.post(Uri.parse(url),
+        await https.post(Uri.parse(url),
           body: json.encode({
             'totalAmount': totalAmount,
             'dateTime': timeStamp,
+             'UserId' : _UserId,
             'products': products
                 .map((e) => {
                       'id': e.id,
@@ -78,7 +79,10 @@ class OrdersProvider with ChangeNotifier {
     print(data);
     final List<OrderItem> newOrder = [];
     data.forEach((key, value) {
-      newOrder.add(OrderItem(
+      if(value['UserId'] == _UserId){
+      newOrder.add(
+
+          OrderItem(
           dateTime: DateTime.parse(value['dateTime']),
           id: key,
           products: (value['products'] as List<dynamic>)
@@ -88,7 +92,7 @@ class OrdersProvider with ChangeNotifier {
                   quantity: ee['quantity'],
                   title: ee['title']))
               .toList(),
-          totalAmount: value['totalAmount']));
+          totalAmount: value['totalAmount']));};
     });
     _items = newOrder.reversed.toList();
     notifyListeners();

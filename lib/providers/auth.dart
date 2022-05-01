@@ -14,6 +14,10 @@ class AuthProvider with ChangeNotifier {
     return _token;
   }
 
+  String get userId {
+    return _userId;
+  }
+
   bool get isAuthenticated {
     print(_token);
     print(_expiryDate);

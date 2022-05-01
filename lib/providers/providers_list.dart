@@ -21,13 +21,22 @@ class Products with ChangeNotifier {
   List<Product> get products {
     return [..._items];
   }
+  final mytoken;
+  final _UserId;
 
   Future<void> delete(String id) async {
     var url =
-        'https://shopapp2-1c326-default-rtdb.firebaseio.com/products/$id.json';
+        'https://shopapp2-1c326-default-rtdb.firebaseio.com/products/$id.json?auth=$mytoken';
+    print(id);
+    var url2 =
+        'https://shopapp2-1c326-default-rtdb.firebaseio.com/userFavourites/$_UserId/$id.json?auth=$mytoken';
     try {
-      await https.delete(Uri.parse(url));
+       await https.delete(Uri.parse(url));
+       print("43");
       _items.removeWhere((element) => element.id == id);
+      //////////
+      await https.delete(Uri.parse(url2));
+
       notifyListeners();
     } catch (error) {
       print(error.toString());
@@ -37,7 +46,7 @@ class Products with ChangeNotifier {
   Future<void> UpdateProduct(String id, String title, String description,
       double price, String Url) async {
     var url =
-        'https://shopapp2-1c326-default-rtdb.firebaseio.com/products/$id.json';
+        'https://shopapp2-1c326-default-rtdb.firebaseio.com/products/$id.json?auth=$mytoken';
     await https.patch(Uri.parse(url),
         body: json.encode({
           'description': description,
@@ -58,28 +67,58 @@ class Products with ChangeNotifier {
     notifyListeners();
   }
 
-  final mytoken;
-  Products(this.mytoken, this._items);
+
+  Products(this.mytoken, this._items, this._UserId);
 
   Future<void> fetchData() async {
+
     List<Product> _its = [];
     final url =
         'https://shopapp2-1c326-default-rtdb.firebaseio.com/products.json?auth=$mytoken';
+    ////////////////////////////////////////////////////////////////////////////////
+    final url2 =
+        'https://shopapp2-1c326-default-rtdb.firebaseio.com/userFavourites/$_UserId.json?auth=$mytoken';
+
     try {
       final response = await https.get(Uri.parse(url));
 
+      if((json.decode(response.body))==null){
+        _items = [];
+        notifyListeners();
+        return;
+      }
       final extracted = (json.decode(response.body)) as Map<String, dynamic>;
+
+      // final  List<Product> newProd = [];
+      // extracted.forEach((key, value) {
+      //   if(value['userId'] == _UserId){
+      //     newProd.add(Product(id:  key, description: value['description'], imageUrl:  value['imageUrl'], price:  value['price'], title:  value['title']));
+      //   }
+      // });
+      // _its = newProd;
+
+      final response2 = await https.get(Uri.parse(url2));
+      final extracted2 = (json.decode(response2.body)) as Map<String, dynamic>;
       // print(extracted);
+
       extracted.forEach((key, value) {
-        _its.add(Product(
+        if (value['userId'] == _UserId)
+          {
+          _its.add(Product(
             id: key,
             title: value['title'],
             description: value['description'],
             price: value['price'],
             imageUrl: value['imageUrl'],
-            isFavorites: value['favourites']));
+            isFavorites: extracted2[key] == null
+                ? false
+                : extracted2[key]['fav'],
+          ));
+          }
+        // isFavorites: value['favourites']));
       });
       _items = _its;
+      // print("gerge");
       notifyListeners();
     } catch (error) {
       print(error.toString());
@@ -87,12 +126,12 @@ class Products with ChangeNotifier {
     }
   }
 
-  Future<void> updateFavourites(String id, bool ans) async {
+  Future<void> updateFavourites(String id, bool ans, String UserId) async {
     var url =
-        'https://shopapp2-1c326-default-rtdb.firebaseio.com/products/$id.json?auth=$mytoken';
+        'https://shopapp2-1c326-default-rtdb.firebaseio.com/userFavourites/$UserId/$id.json?auth=$mytoken';
     try {
       final response = await https
-          .patch(Uri.parse(url), body: json.encode({'favourites': ans}))
+          .patch(Uri.parse(url), body: json.encode({'fav': ans}))
           .then((value) {
         _items.forEach((element) {
           if (element.id == id) {
@@ -104,7 +143,7 @@ class Products with ChangeNotifier {
       });
     } catch (error) {
       print(error.toString());
-      throw (error);
+      // throw (error);
     }
   }
 
@@ -116,12 +155,13 @@ class Products with ChangeNotifier {
     try {
       final response = await https.post(URL,
           body: json.encode({
-            // 'id' : id,
+            'id': id,
             'title': title,
             'description': description,
             'price': price,
             'imageUrl': Url,
-            'favourites': false,
+            'userId' : _UserId,
+            // 'favourites': false,
           }));
       _items.add(Product(
           id: json.decode(response.body)['name'],

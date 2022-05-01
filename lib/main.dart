@@ -32,15 +32,17 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (ctx) => AuthProvider()),
           ChangeNotifierProxyProvider<AuthProvider, OrdersProvider>(
             create: (_) => OrdersProvider(null,
-                []), //error here saying 3 positional arguments expected,but 0 found.
+                [],null), //error here saying 3 positional arguments expected,but 0 found.
             update: (ctx, auth, previusProducts) => OrdersProvider(auth.token,
-                previusProducts == null ? [] : previusProducts.items),
+                previusProducts == null ? [] : previusProducts.items,auth.userId),
           ),
           ChangeNotifierProxyProvider<AuthProvider, Products>(
-            create: (_) => Products(null,
-                []), //error here saying 3 positional arguments expected,but 0 found.
-            update: (ctx, auth, previusProducts) => Products(auth.token,
-                previusProducts == null ? [] : previusProducts.products),
+            create: (_) => Products(null, [],
+                null), //error here saying 3 positional arguments expected,but 0 found.
+            update: (ctx, auth, previusProducts) => Products(
+                auth.token,
+                previusProducts == null ? [] : previusProducts.products,
+                auth.userId),
           ),
           // ChangeNotifierProxyProvider<AuthProvider, Products>(
           //     // create: Products(),
@@ -90,8 +92,9 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
   }
 
-  Future<void> onrefresh(BuildContext context) async {
-    await Provider.of<Products>(context, listen: false).fetchData();
+  Future<void> onrefresh(BuildContext context2) async {
+    print("3232");
+    await Provider.of<Products>(context2, listen: false).fetchData();
   }
 
   @override

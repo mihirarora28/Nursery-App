@@ -7,7 +7,7 @@ import 'package:shops/widgets/newProduct.dart';
 
 class AddProduct extends StatelessWidget {
   Future<void> onrefresh(BuildContext context) async {
-    await Provider.of<Products>(context, listen: false).fetchData();
+    await Provider.of<Products>(context, listen: false);
   }
 
   @override
