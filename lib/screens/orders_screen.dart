@@ -10,11 +10,17 @@ class orders_screen extends StatefulWidget {
 }
 
 class _orders_screenState extends State<orders_screen> {
+  bool isLoading  = true;
   @override
   void initState() {
     // TODO: implement initState
     Provider.of<OrdersProvider>(context,listen: false).fetchMyOrders().then((value){
       print("HHELO");
+    }).then((value) {
+      setState(() {
+        isLoading = false;
+      });
+   
     });
     super.initState();
   }
@@ -26,7 +32,7 @@ class _orders_screenState extends State<orders_screen> {
         backgroundColor: Theme.of(context).primaryColor,
         title: Text('Shopping App'),
       ),
-      body: Container(
+      body: isLoading == true? Center(child: CircularProgressIndicator()): Container(
         height: double.infinity,
         child: ListView.builder(
           itemCount: myList.items.length,

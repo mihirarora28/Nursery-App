@@ -83,6 +83,7 @@ class Products with ChangeNotifier {
       final response = await https.get(Uri.parse(url));
 
       if((json.decode(response.body))==null){
+        print("42");
         _items = [];
         notifyListeners();
         return;
@@ -98,9 +99,15 @@ class Products with ChangeNotifier {
       // _its = newProd;
 
       final response2 = await https.get(Uri.parse(url2));
-      final extracted2 = (json.decode(response2.body)) as Map<String, dynamic>;
-      // print(extracted);
+      // try((json.decode(response2.body)) == null ){
+      //
+      // }
 
+      var extracted2 = null;
+      if((json.decode(response2.body))!= null)
+       extracted2 = (json.decode(response2.body)) as Map<String, dynamic>;
+      // print(extracted);
+      print("#2");
       extracted.forEach((key, value) {
         if (value['userId'] == _UserId)
           {
@@ -110,7 +117,7 @@ class Products with ChangeNotifier {
             description: value['description'],
             price: value['price'],
             imageUrl: value['imageUrl'],
-            isFavorites: extracted2[key] == null
+            isFavorites: extracted2 == null
                 ? false
                 : extracted2[key]['fav'],
           ));
