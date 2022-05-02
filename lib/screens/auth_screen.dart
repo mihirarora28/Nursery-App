@@ -25,6 +25,7 @@ class _AuthScreenState extends State<AuthScreen> {
     // final transformConfig = Matrix4.rotationZ(-8 * pi / 180);
     // transformConfig.translate(-10.0);
     return Scaffold(
+      // backgroundColor: Theme.of(context).primaryColor,
       // resizeToAvoidBottomInset: false,
       body: Stack(
         children: <Widget>[
@@ -32,8 +33,8 @@ class _AuthScreenState extends State<AuthScreen> {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Color.fromRGBO(215, 117, 255, 1).withOpacity(0.5),
-                  Color.fromRGBO(255, 188, 117, 1).withOpacity(0.9),
+                  Color.fromRGBO(21, 117, 25, 1).withOpacity(0.5),
+                  Color.fromRGBO(25, 188, 11, 1).withOpacity(0.9),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -59,7 +60,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       // ..translate(-10.0),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: Colors.deepOrange.shade900,
+                        color: Colors.green,
                         boxShadow: [
                           BoxShadow(
                             blurRadius: 8,
@@ -69,7 +70,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         ],
                       ),
                       child: Text(
-                        'MyShop App',
+                        'Plant App',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 35,

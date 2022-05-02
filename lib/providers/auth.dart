@@ -11,11 +11,17 @@ class AuthProvider with ChangeNotifier {
   var _userId;
 
   String get token {
-    return _token;
+    if (_token != null)
+      return _token;
+    else
+      return "";
   }
 
   String get userId {
-    return _userId;
+    if (_userId != null)
+      return _userId;
+    else
+      return "";
   }
 
   bool get isAuthenticated {
@@ -70,6 +76,13 @@ class AuthProvider with ChangeNotifier {
         DateTime.now().add(Duration(seconds: int.parse(val['expiresIn'])));
 
     _userId = val['localId'];
+    notifyListeners();
+  }
+
+  void logout() {
+    _expiryDate = null;
+    _token = null;
+    _userId = null;
     notifyListeners();
   }
 }

@@ -30,7 +30,7 @@ class _ProductItemState extends State<ProductItem> {
 
   @override
   Widget build(BuildContext context) {
-    final myList = Provider.of<Products>(context, listen: true);
+    final myList = Provider.of<Products>(context, listen: false);
     final myList2 = Provider.of<CartProvider>(context, listen: false);
     final myList3 = Provider.of<AuthProvider>(context, listen: false);
 

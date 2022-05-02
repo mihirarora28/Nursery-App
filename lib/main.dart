@@ -31,10 +31,12 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (ctx) => CartProvider()),
           ChangeNotifierProvider(create: (ctx) => AuthProvider()),
           ChangeNotifierProxyProvider<AuthProvider, OrdersProvider>(
-            create: (_) => OrdersProvider(null,
-                [],null), //error here saying 3 positional arguments expected,but 0 found.
-            update: (ctx, auth, previusProducts) => OrdersProvider(auth.token,
-                previusProducts == null ? [] : previusProducts.items,auth.userId),
+            create: (_) => OrdersProvider(null, [],
+                null), //error here saying 3 positional arguments expected,but 0 found.
+            update: (ctx, auth, previusProducts) => OrdersProvider(
+                auth.token,
+                previusProducts == null ? [] : previusProducts.items,
+                auth.userId),
           ),
           ChangeNotifierProxyProvider<AuthProvider, Products>(
             create: (_) => Products(null, [],
@@ -64,7 +66,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             initialRoute: '/',
             theme: ThemeData(
-              primarySwatch: Colors.deepOrange,
+              primarySwatch: Colors.green,
             ),
           ),
         ));
@@ -101,6 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final myList = Provider.of<Products>(context, listen: true);
     final myList2 = Provider.of<CartProvider>(context, listen: true);
+    final myList3 = Provider.of<AuthProvider>(context, listen: false);
     List<Product> newList = myList.products;
     if (myList.showfavourites == true) {
       newList =
@@ -146,6 +149,15 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               leading: Icon(Icons.add),
               title: Text('Add/Edit/Delete Product'),
+            ),
+            Divider(),
+            ListTile(
+              onTap: () {
+                Navigator.of(context).pop();
+                myList3.logout();
+              },
+              leading: Icon(Icons.exit_to_app),
+              title: Text('Log out'),
             ),
           ],
         ),

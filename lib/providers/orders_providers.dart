@@ -20,7 +20,7 @@ class OrdersProvider with ChangeNotifier {
 
   final AuthToken;
   final _UserId;
-  OrdersProvider(this.AuthToken, this._items,this._UserId);
+  OrdersProvider(this.AuthToken, this._items, this._UserId);
 
   List<OrderItem> get items {
     return [..._items];
@@ -40,11 +40,11 @@ class OrdersProvider with ChangeNotifier {
     // });
     String timeStamp = DateTime.now().toIso8601String();
     try {
-        await https.post(Uri.parse(url),
+      await https.post(Uri.parse(url),
           body: json.encode({
             'totalAmount': totalAmount,
             'dateTime': timeStamp,
-             'UserId' : _UserId,
+            'UserId': _UserId,
             'products': products
                 .map((e) => {
                       'id': e.id,
@@ -75,24 +75,29 @@ class OrdersProvider with ChangeNotifier {
     var url =
         'https://shopapp2-1c326-default-rtdb.firebaseio.com/orders.json?auth=$AuthToken';
     final response = await https.get(Uri.parse(url));
+    if (jsonDecode(response.body) == null) {
+      _items = [];
+      notifyListeners();
+      return;
+    }
     final data = jsonDecode(response.body) as Map<String, dynamic>;
     print(data);
     final List<OrderItem> newOrder = [];
     data.forEach((key, value) {
-      if(value['UserId'] == _UserId){
-      newOrder.add(
-
-          OrderItem(
-          dateTime: DateTime.parse(value['dateTime']),
-          id: key,
-          products: (value['products'] as List<dynamic>)
-              .map((ee) => Cart(
-                  id: ee['id'],
-                  price: ee['price'],
-                  quantity: ee['quantity'],
-                  title: ee['title']))
-              .toList(),
-          totalAmount: value['totalAmount']));};
+      if (value['UserId'] == _UserId) {
+        newOrder.add(OrderItem(
+            dateTime: DateTime.parse(value['dateTime']),
+            id: key,
+            products: (value['products'] as List<dynamic>)
+                .map((ee) => Cart(
+                    id: ee['id'],
+                    price: ee['price'],
+                    quantity: ee['quantity'],
+                    title: ee['title']))
+                .toList(),
+            totalAmount: value['totalAmount']));
+      }
+      ;
     });
     _items = newOrder.reversed.toList();
     notifyListeners();
