@@ -16,7 +16,7 @@ class AddProduct extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
-        title: Text('Shopping App'),
+        title: Text('Plant App'),
         actions: [
           Padding(
               padding: EdgeInsets.all(10.0),

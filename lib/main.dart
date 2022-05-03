@@ -62,7 +62,19 @@ class MyApp extends StatelessWidget {
               '/EditProductsScreen': (ctx) => EditProductsScreen(),
               AuthScreen.routeName: (ctx) => AuthScreen(),
             },
-            home: Auth.isAuthenticated == true ? MyHomePage() : AuthScreen(),
+            home: Auth.isAuthenticated == true
+                ? MyHomePage()
+                : (Auth.tryLogin().then((value) {
+                          print(value);
+                          if (value) {
+                            return ProductDetailsScreen();
+                          } else {
+                            return AuthScreen();
+                          }
+                        }) ==
+                        true
+                    ? MyHomePage()
+                    : AuthScreen()),
             debugShowCheckedModeBanner: false,
             initialRoute: '/',
             theme: ThemeData(
@@ -115,7 +127,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             AppBar(
               backgroundColor: Theme.of(context).primaryColor,
-              title: Text('Shopping App'),
+              title: Text('Plant App'),
               automaticallyImplyLeading: false,
             ),
             Divider(),
@@ -163,45 +175,44 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       appBar: AppBar(
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed('/cartScreen');
-            },
-            icon: Badge(
-                child: Icon(
-                  Icons.shopping_cart,
-                  size: 30.0,
-                ),
-                color: Theme.of(context).primaryColor,
-                value: myList2.sizeOfMap.toString()),
-          ),
-          PopupMenuButton(
-              icon: Icon(Icons.more_vert),
-              onSelected: (FilterOptions index) {
-                print(index);
-                if (index == FilterOptions.onlyFavourites) {
-                  myList.ShowFavorites();
-                } else {
-                  myList.ShowAll();
-                }
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed('/cartScreen');
               },
-              itemBuilder: (_) {
-                return [
-                  PopupMenuItem(
-                    child: Text("Favourite Products"),
-                    value: FilterOptions.onlyFavourites,
+              icon: Badge(
+                  child: Icon(
+                    Icons.shopping_cart,
+                    size: 30.0,
                   ),
-                  PopupMenuItem(
-                    child: Text("Show All Products"),
-                    value: FilterOptions.ShowmeAll,
-                  ),
-                ];
-              }),
-        ],
-        backgroundColor: Theme.of(context).primaryColor,
-        title: Text('Shopping App'),
-      ),
+                  color: Theme.of(context).primaryColor,
+                  value: myList2.sizeOfMap.toString()),
+            ),
+            PopupMenuButton(
+                icon: Icon(Icons.more_vert),
+                onSelected: (FilterOptions index) {
+                  print(index);
+                  if (index == FilterOptions.onlyFavourites) {
+                    myList.ShowFavorites();
+                  } else {
+                    myList.ShowAll();
+                  }
+                },
+                itemBuilder: (_) {
+                  return [
+                    PopupMenuItem(
+                      child: Text("Favourite Products"),
+                      value: FilterOptions.onlyFavourites,
+                    ),
+                    PopupMenuItem(
+                      child: Text("Show All Products"),
+                      value: FilterOptions.ShowmeAll,
+                    ),
+                  ];
+                }),
+          ],
+          backgroundColor: Theme.of(context).primaryColor,
+          title: Text('Plant App')),
       body: isLoading == true
           ? Center(child: CircularProgressIndicator())
           : RefreshIndicator(
