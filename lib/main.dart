@@ -66,8 +66,9 @@ class MyApp extends StatelessWidget {
                 ? MyHomePage()
                 : (Auth.tryLogin().then((value) {
                           print(value);
+                          print("HAHAHA");
                           if (value) {
-                            return ProductDetailsScreen();
+                            return MyHomePage();
                           } else {
                             return AuthScreen();
                           }
@@ -98,11 +99,16 @@ class _MyHomePageState extends State<MyHomePage> {
       isLoading = true;
     });
     // TODO: implement initState
-    Provider.of<Products>(context, listen: false).fetchData().then((value) {
+    print("#!#@@#32");
+    Provider.of<Products>(context, listen: false).fetchData().then((_) {
+      print("here then is called");
       setState(() {
         isLoading = false;
       });
+    }).catchError((error) {
+      print("ERROR");
     });
+    print("#@##@@");
     super.initState();
   }
 

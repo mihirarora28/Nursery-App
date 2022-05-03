@@ -26,15 +26,14 @@ class AuthProvider with ChangeNotifier {
   }
 
   bool get isAuthenticated {
-    print(_token);
-    print(_expiryDate);
-
-    print(_userId);
-
     if (_token != null &&
         _userId != null &&
         _expiryDate != null &&
         _expiryDate.isAfter(DateTime.now())) {
+      print("HAHAHA");
+
+      print(_userId);
+      print("HAHAHA");
       return true;
     }
     return false;
@@ -110,6 +109,7 @@ class AuthProvider with ChangeNotifier {
     _token = data['token'];
     _userId = data['userId'];
     _expiryDate = expdate;
+    print(_userId);
     notifyListeners();
     autologout();
     return true;

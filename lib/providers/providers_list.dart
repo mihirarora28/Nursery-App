@@ -21,6 +21,7 @@ class Products with ChangeNotifier {
   List<Product> get products {
     return [..._items];
   }
+
   final mytoken;
   final _UserId;
 
@@ -31,8 +32,8 @@ class Products with ChangeNotifier {
     var url2 =
         'https://shopapp2-1c326-default-rtdb.firebaseio.com/userFavourites/$_UserId/$id.json?auth=$mytoken';
     try {
-       await https.delete(Uri.parse(url));
-       print("43");
+      await https.delete(Uri.parse(url));
+      print("43");
       _items.removeWhere((element) => element.id == id);
       //////////
       await https.delete(Uri.parse(url2));
@@ -67,11 +68,9 @@ class Products with ChangeNotifier {
     notifyListeners();
   }
 
-
   Products(this.mytoken, this._items, this._UserId);
 
   Future<void> fetchData() async {
-
     List<Product> _its = [];
     final url =
         'https://shopapp2-1c326-default-rtdb.firebaseio.com/products.json?auth=$mytoken';
@@ -82,14 +81,14 @@ class Products with ChangeNotifier {
     try {
       final response = await https.get(Uri.parse(url));
 
-      if((json.decode(response.body))==null){
+      if ((json.decode(response.body)) == null) {
         print("42");
         _items = [];
         notifyListeners();
         return;
       }
       final extracted = (json.decode(response.body)) as Map<String, dynamic>;
-
+      // print(extracted);
       // final  List<Product> newProd = [];
       // extracted.forEach((key, value) {
       //   if(value['userId'] == _UserId){
@@ -104,27 +103,28 @@ class Products with ChangeNotifier {
       // }
 
       var extracted2 = null;
-      if((json.decode(response2.body))!= null)
-       extracted2 = (json.decode(response2.body)) as Map<String, dynamic>;
+      print("Calling...");
+      print(_UserId);
+      if ((json.decode(response2.body)) != null)
+        extracted2 = (json.decode(response2.body)) as Map<String, dynamic>;
       // print(extracted);
       print("#2");
       extracted.forEach((key, value) {
-        if (value['userId'] == _UserId)
-          {
+        if (value['userId'] == _UserId) {
           _its.add(Product(
             id: key,
             title: value['title'],
             description: value['description'],
             price: value['price'],
             imageUrl: value['imageUrl'],
-            isFavorites: extracted2 == null
-                ? false
-                : extracted2[key]['fav'],
+            isFavorites: extracted2 == null ? false : extracted2[key]['fav'],
           ));
-          }
+        }
         // isFavorites: value['favourites']));
       });
       _items = _its;
+      print("Calling...");
+      print(_items);
       // print("gerge");
       notifyListeners();
     } catch (error) {
@@ -167,7 +167,7 @@ class Products with ChangeNotifier {
             'description': description,
             'price': price,
             'imageUrl': Url,
-            'userId' : _UserId,
+            'userId': _UserId,
             // 'favourites': false,
           }));
       _items.add(Product(
