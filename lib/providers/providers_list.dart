@@ -88,28 +88,20 @@ class Products with ChangeNotifier {
         return;
       }
       final extracted = (json.decode(response.body)) as Map<String, dynamic>;
-      // print(extracted);
-      // final  List<Product> newProd = [];
-      // extracted.forEach((key, value) {
-      //   if(value['userId'] == _UserId){
-      //     newProd.add(Product(id:  key, description: value['description'], imageUrl:  value['imageUrl'], price:  value['price'], title:  value['title']));
-      //   }
-      // });
-      // _its = newProd;
+
 
       final response2 = await https.get(Uri.parse(url2));
-      // try((json.decode(response2.body)) == null ){
-      //
-      // }
+
 
       var extracted2 = null;
-      print("Calling...");
-      print(_UserId);
+
+
       if ((json.decode(response2.body)) != null)
         extracted2 = (json.decode(response2.body)) as Map<String, dynamic>;
-      // print(extracted);
-      print("#2");
+
+
       extracted.forEach((key, value) {
+
         if (value['userId'] == _UserId) {
           _its.add(Product(
             id: key,
@@ -117,18 +109,24 @@ class Products with ChangeNotifier {
             description: value['description'],
             price: value['price'],
             imageUrl: value['imageUrl'],
-            isFavorites: extracted2 == null ? false : extracted2[key]['fav'],
+            isFavorites: extracted2 == null ? false :(extracted2[key] == null ? false: extracted2[key]['fav']),
           ));
         }
         // isFavorites: value['favourites']));
       });
+      print(_its.length);
+      // print(_its);
+      // print('callllllllllllllllllllllllllllll');
       _items = _its;
-      print("Calling...");
-      print(_items);
-      // print("gerge");
+      // print('callllllllllllllllllllllllllllll');
+      // print("Calling...");
+      // print(_items);
+
+
       notifyListeners();
     } catch (error) {
       print(error.toString());
+      print("@#@#");
       // throw(error);
     }
   }

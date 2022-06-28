@@ -59,6 +59,7 @@ class AuthProvider with ChangeNotifier {
     _expiryDate =
         DateTime.now().add(Duration(seconds: int.parse(val['expiresIn'])));
     _userId = val['localId'];
+    print(_userId);
     autologout();
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();

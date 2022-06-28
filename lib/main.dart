@@ -127,6 +127,7 @@ class _MyHomePageState extends State<MyHomePage> {
       newList =
           newList.where((element) => element.isFavorites == true).toList();
     }
+    // print(newList.length);
     return Scaffold(
       drawer: Drawer(
         child: Column(
@@ -237,9 +238,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
                 itemCount: newList.length,
+
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  childAspectRatio: 3 / 2,
+                  childAspectRatio: 4 / 4,
                   crossAxisSpacing: 10.0,
                   mainAxisSpacing: 10.0,
                 ),
